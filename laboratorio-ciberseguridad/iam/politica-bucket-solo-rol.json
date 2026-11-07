@@ -1,0 +1,26 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PermitirLecturaAlRolNecesario",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::000000000000:role/actividad3-lector-s3"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::actividad3-seguro-local/*"
+    },
+    {
+      "Sid": "DenegarLecturaFueraDelRolAutorizado",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::actividad3-seguro-local/*",
+      "Condition": {
+        "ArnNotEquals": {
+          "aws:PrincipalArn": "arn:aws:iam::000000000000:role/actividad3-lector-s3"
+        }
+      }
+    }
+  ]
+}
