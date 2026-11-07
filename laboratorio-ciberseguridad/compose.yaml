@@ -1,0 +1,32 @@
+services:
+  localstack:
+    image: localstack/localstack-pro:latest
+    ports:
+      - "127.0.0.1:4566:4566"
+    environment:
+      SERVICES: s3
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN:?Define LOCALSTACK_AUTH_TOKEN en tu terminal}
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:4566/_localstack/health', timeout=4).read()"
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  api:
+    build: ./api
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?}
+      USER_PASSWORD: ${USER_PASSWORD:?}
+
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    profiles:
+      - scan

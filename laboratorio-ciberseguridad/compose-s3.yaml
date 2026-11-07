@@ -1,0 +1,18 @@
+services:
+  localstack:
+    image: localstack/localstack-pro:latest
+    ports:
+      - "127.0.0.1:4566:4566"
+    environment:
+      SERVICES: s3
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN:?}
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:4566/_localstack/health', timeout=4).read()"
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s

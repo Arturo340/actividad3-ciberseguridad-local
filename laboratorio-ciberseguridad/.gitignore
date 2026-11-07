@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+*.tfstate
+*.tfstate.*
+.terraform/
+*.tfplan
+crash.log
+node_modules/
+evidencias/*
+!evidencias/README.md
+*.token
+*.secret
+anonimo.txt
